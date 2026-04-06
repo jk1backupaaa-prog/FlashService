@@ -1,0 +1,5 @@
+# Local data
+/data/
+
+# OS
+.DS_Store
