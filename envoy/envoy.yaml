@@ -22,10 +22,20 @@ static_resources:
                             prefix: "/api/orders"
                           route:
                             cluster: order_service
+                            regex_rewrite:
+                              pattern:
+                                google_re2: {}
+                                regex: "^/api/orders/?"
+                              substitution: "/"
                         - match:
                             prefix: "/api/users"
                           route:
                             cluster: user_service
+                            regex_rewrite:
+                              pattern:
+                                google_re2: {}
+                                regex: "^/api/users/?"
+                              substitution: "/"
                         - match:
                             prefix: "/"
                           direct_response:
