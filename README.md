@@ -271,21 +271,12 @@ done
 
 | 組別 | 負責人 | 負責技術 |
 |---|---|---|
-| A1 | 晉綾 | 文件統籌、期中報告 |
-| A2 | 品力 | 壓力測試與 NFR 實驗 |
-| B1 | Robin | 前端介面開發 |
-| B2 | 懷生 | User / Catalog Service |
+| A1 | 晉綾 | 文件統籌、期中報告（深入介紹 Kafka 架構與原理）、整合全組 AI 協作紀錄、撰寫/維護 README |
+| A2 | 品力 | 壓力測試與 NFR 實驗（導入 k6 或 Locust、撰寫高併發腳本、收集吞吐量/延遲/錯誤率數據並視覺化） |
+| B1 | Robin | 前端介面開發（React/Next.js 前台：商品列表、購物車、訂單查詢；商家後台：商品上架、庫存設定、訂單列表）、前端路由與狀態管理 |
+| B2 | 懷生 | User Service（註冊、登入、身份驗證）、Catalog Service（商品 CRUD）、定義前端 API 規格、透過 Envoy 串接 C 組服務 |
 | C1 | 偉杰 | Order Service（下單邏輯、庫存扣減、與 Kafka Producer 銜接） |
 | C2 | 柏慶 | Inventory Service（庫存管理、防超賣機制、inventory.updated producer） |
 | D1 | 凱輝 | Kafka 事件串流、KEDA 自動擴縮容、Notification Worker、Topic 管理 |
 | D2 | 至弘 | CockroachDB 叢集、Envoy Gateway、資料庫 Schema |
 | D3 | 敬翰 | Docker Compose 基礎建設、Monorepo 骨架、CI/CD 整合 |
-
-
-
-
----
-
-## 專案連結
-
-GitHub: [https://github.com/Vincent23412/FlashService](https://github.com/Vincent23412/FlashService)
