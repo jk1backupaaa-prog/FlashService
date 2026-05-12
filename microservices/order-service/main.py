@@ -44,7 +44,7 @@ def close_producer():
 def create_order(order: dict):
     try:
         producer = get_producer()
-        order_id = f"order-{int(time.time() * 1000)}"
+        order_id = f"order-{int(time.time() * 1000)}" # Sure
         event = {
             "event_type": "order.created",
             "order_id": order_id,
@@ -69,6 +69,9 @@ def create_order(order: dict):
     except Exception as exc:
         raise HTTPException(status_code=500, detail=f"Internal error: {exc}")
 
+@app.get("/order/{order_id}") # Check an order on /order/*id*
+def order_check(order_id: str):
+   # oh fuck am I not liking this 
 
 @app.get("/health")
 def health():
