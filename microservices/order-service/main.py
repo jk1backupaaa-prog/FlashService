@@ -71,7 +71,7 @@ def create_order(order: dict):
 
 @app.get("/order/{order_id}") # Check an order on /order/*id*
 def order_check(order_id: str):
-   # oh fuck am I not liking this 
+    reutrn {"status": "fuck"}
 
 @app.get("/health")
 def health():

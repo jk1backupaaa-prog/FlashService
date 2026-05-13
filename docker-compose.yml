@@ -41,7 +41,7 @@ services:
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
     healthcheck:
-      test: ["CMD", "bash", "-c", "kafka-broker-api-versions.sh --bootstrap-server localhost:9092"]
+      test: ["CMD", "bash", "-c", "/opt/kafka/bin/kafka-broker-api-versions.sh --bootstrap-server localhost:9092"]
       interval: 5s
       timeout: 5s
       retries: 10
@@ -57,11 +57,11 @@ services:
       - -c
       - |
         echo "Creating Kafka topics..."
-        kafka-topics.sh --create --if-not-exists --topic order.created --partitions 3 --replication-factor 1 --bootstrap-server kafka:9093
-        kafka-topics.sh --create --if-not-exists --topic notification --partitions 3 --replication-factor 1 --bootstrap-server kafka:9093
-        kafka-topics.sh --create --if-not-exists --topic inventory.updated --partitions 3 --replication-factor 1 --bootstrap-server kafka:9093
+        /opt/kafka/bin/kafka-topics.sh --create --if-not-exists --topic order.created --partitions 3 --replication-factor 1 --bootstrap-server kafka:9093
+        /opt/kafka/bin/kafka-topics.sh --create --if-not-exists --topic notification --partitions 3 --replication-factor 1 --bootstrap-server kafka:9093
+        /opt/kafka/bin/kafka-topics.sh --create --if-not-exists --topic inventory.updated --partitions 3 --replication-factor 1 --bootstrap-server kafka:9093
         echo "Topics created."
-        kafka-topics.sh --bootstrap-server kafka:9093 --list
+        /opt/kafka/bin/kafka-topics.sh --bootstrap-server kafka:9093 --list
 
   gateway:
     image: envoyproxy/envoy:v1.26-latest
