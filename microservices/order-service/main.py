@@ -44,6 +44,7 @@ def close_producer():
             _producer = None
 
 # the db thing. thank you cocckroach labs for putting example in a freaking github repo and not putting a link to it
+
 def db_order_insert(conn, order_id, order: dict):
     with conn.cursor() as cur:
         cur.execute("UPSERT INTO orders(order_id, user_id, status, created_at) VALUES (%s), (%s), (%s), (%s)", (order_id,order.get("user_id"),order.get("status"),order.get("timestamp")))
@@ -79,8 +80,7 @@ def create_order(order: dict):
 
 
         # storing order to db
-        try:
-            db_url = 
+        db_conn = psycopg2.connect(os.environ['DATABASE_URL'])
 
         db_order_insert(db_conn, order_id, event)
         return {
@@ -95,7 +95,8 @@ def create_order(order: dict):
 
 @app.get("/order/{order_id}") # Check an order on /order?orderid=*id*
 def order_check(order_id: str):
-    order_list = db_order_fetch()
+    db_conn = psycopg2.connect(os.environ['DATABASE_URL'])
+    order_list = db_order_fetch(db_conn, order_id)
     return {
         "order_id": order_id
         "user_id": order_list.get("user_id")
