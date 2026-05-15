@@ -7,6 +7,10 @@ from fastapi import FastAPI, HTTPException
 from kafka import KafkaProducer
 from kafka.errors import KafkaError
 
+import psycopg2
+import psycopg2.extras
+from psycopg2.errors import SerializationFailure
+
 app = FastAPI()
 
 BROKERS = os.getenv("KAFKA_BROKERS", "kafka:9092").split(",")
@@ -15,7 +19,7 @@ ORDER_CREATED_TOPIC = "order.created"
 _producer = None
 _producer_lock = threading.Lock()
 
-
+# Well at least it lucks it's way
 def get_producer():
     global _producer
     with _producer_lock:
@@ -39,6 +43,20 @@ def close_producer():
             _producer.close(timeout=10)
             _producer = None
 
+# the db thing. thank you cocckroach labs for putting example in a freaking github repo and not putting a link to it
+def db_order_insert(conn, order_id, order: dict):
+    with conn.cursor() as cur:
+        cur.execute("UPSERT INTO orders(order_id, user_id, status, created_at) VALUES (%s), (%s), (%s), (%s)", (order_id,order.get("user_id"),order.get("status"),order.get("timestamp")))
+
+    conn.commit()
+
+def db_order_fetch(conn, order_id):
+    with conn.cursor() as cur:
+        cur.execute("SELECT * FROM orders WHERE order_id = %s", (order_id,))
+        order_row = cur.fetchall()
+        conn.commit()
+        return order_row
+
 
 @app.post("/order")
 def create_order(order: dict):
@@ -59,6 +77,12 @@ def create_order(order: dict):
             value=event,
         ).get(timeout=10)
 
+
+        # storing order to db
+        try:
+            db_url = 
+
+        db_order_insert(db_conn, order_id, event)
         return {
             "status": "ok",
             "order_id": order_id,
@@ -69,9 +93,15 @@ def create_order(order: dict):
     except Exception as exc:
         raise HTTPException(status_code=500, detail=f"Internal error: {exc}")
 
-@app.get("/order/{order_id}") # Check an order on /order/*id*
+@app.get("/order/{order_id}") # Check an order on /order?orderid=*id*
 def order_check(order_id: str):
-    reutrn {"status": "fuck"}
+    order_list = db_order_fetch()
+    return {
+        "order_id": order_id
+        "user_id": order_list.get("user_id")
+        "status": "fuck",
+        "ordered_at": order_list.get("created_at")
+    }
 
 @app.get("/health")
 def health():
